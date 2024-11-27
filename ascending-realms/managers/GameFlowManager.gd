@@ -20,7 +20,7 @@ func load_game():
 
 func transition_to_scene(scene_path):
 	# Changes the current scene to the specified one
-	get_tree().change_scene(scene_path)
+	get_tree().change_scene_to_file(scene_path)
 
 
 # Example usage in any other script
