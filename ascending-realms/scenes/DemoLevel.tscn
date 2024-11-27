@@ -1,3 +1,13 @@
-[gd_scene format=3 uid="uid://cd72mkta1vwsj"]
+[gd_scene load_steps=2 format=3 uid="uid://cd72mkta1vwsj"]
+
+[ext_resource type="Texture2D" uid="uid://dyl20j7yonmic" path="res://assets/Terrain/spr_dirt_plain.png" id="1_voi3m"]
 
 [node name="DemoLevel" type="Node2D"]
+
+[node name="MapTerrain" type="TextureRect" parent="."]
+offset_left = 286.0
+offset_top = 90.0
+offset_right = 993.0
+offset_bottom = 694.0
+texture = ExtResource("1_voi3m")
+stretch_mode = 1
