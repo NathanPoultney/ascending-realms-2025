@@ -1,0 +1,602 @@
+Adventure Reznara
+===================
+
+obj_controller (persistent): |DONE|
+----------------------------------------------------------------------------------------------------------------------
+
+Create event:
+
+// initialise the time accumulator
+global.time_accumulator = 0;
+
+Step event:
+// TIMEKEEPING 
+/* only move time forward if the game is not paused, this affects all time_accumulators as such the game
+   is paused as long as the time_accumulators are not increasing and individual time based events do not need
+   to be paused individually */
+if(!global.isPaused)
+{
+	// increment the time accumulator by the delta time in seconds
+	global.time_accumulators.one_second += delta_time / 1000000; // convert microseconds to seconds
+	// Update clock specific accumulator by delta time
+	global.time_accumulators.clock += delta_time / 1000000;  // convert microseconds to seconds
+
+	// check if at least one second has passed
+	if(global.time_accumulators.one_second >= 1.0) {
+		// perform actions
+		show_debug_message("One second has passed using delta time");
+	
+		ApplyHealthRegen();
+		ApplyManaRegen();
+		if(global.gameState == GameState.MOB_ENCOUNTER) { ApplyCombatEffectiveness(); }
+	
+		// Subtract one second from the accumulator
+		global.time_accumulators.one_second -= 1.0;
+	}
+}
+
+/// HOT KEYS -- START ///
+
+// if the ESC key has been pressed, free up the used memory and exit the game
+if(keyboard_check_pressed(vk_escape))
+{
+	QuitGame();		
+}
+
+// toggle modal
+if (keyboard_check_pressed(vk_space) || keyboard_check_pressed(ord("P")) || keyboard_check_pressed(vk_pause)) {
+    if (instance_exists(obj_modal)) {
+        // Modal exists, so destroy it
+        with (obj_modal) instance_destroy();
+		
+		// unpause the game
+		global.isPaused = false;
+    } else {
+		// pause the game
+		global.isPaused = true;
+		
+        // Modal does not exist, so create it
+        var modalInstance = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_modal);
+        // Optionally set modal properties here, e.g., modalInstance.modalText = "New Text";
+		// there could be different functions for say menu, settings, worldmap etc 
+		modalInstance.modalText = "Paused: Hello Reznara! total birds seen: " + string(global.run_stats.totalBirdsSeen);
+    }
+}
+
+// toggle alt text
+if(keyboard_check_direct(vk_alt)) {
+	global.showAlt = true;	
+} else {
+	global.showAlt = false;	
+}
+
+/// HOT KEYS -- END ///
+
+----------------------------------------------------------------------------------------------------------------------
+
+obj_debug (visible, persistent): |DONE|
+
+Create event:
+(empty)
+
+Draw event:
+if(global.debug_mode_enabled == true)
+{
+	draw_text_color(x, y - 30, global.config.game_version, c_white, c_white, c_white, c_white, 255);
+	draw_text_color(x, y - 15, "Set FPS: " + string(game_get_speed(gamespeed_fps)), c_white, c_white, c_white, c_white, 255);
+	draw_text_color(x, y, "Current FPS: " + string(fps), c_white, c_white, c_white, c_white, 255);
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+obj_bar (visible): |DONE|
+
+Create event:
+totalWidth = 200;
+height = 6;
+barWidth = (current / max) * totalWidth;
+
+Draw event:
+bgColor = make_colour_rgb(112, 3, 12); // Dark red
+fillColor = c_red; // Red
+
+current = min(current, maxHealth);
+percentage = current / maxHealth;
+
+percentage = min(1, percentage); // Clamp to 1 (100%)
+
+// Calculate the width of the filled portion
+barWidth = totalWidth * percentage;
+
+// Draw the background
+draw_set_colour(bgColor);
+draw_rectangle(x, y, x + totalWidth, y + height, false);
+
+// Draw the filled portion
+draw_set_colour(fillColor);
+    
+// For health, fill from right to left
+draw_rectangle(x + totalWidth - barWidth, y, x + totalWidth, y + height, false);
+
+// Draw the border
+draw_set_colour(fillColor); // Use the fill color for the border
+draw_rectangle(x - 1, y - 1, x + totalWidth + 1, y + height + 1, true); // Border
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+obj_card (visible):
+
+Step event:
+// Check if the mouse is over the card
+if (point_in_rectangle(mouse_x, mouse_y, bbox_left, bbox_top, bbox_right, bbox_bottom)) {
+    // Change to hover sprite if the popup modal is not present
+    if (!instance_exists(obj_modal)) {
+        sprite_index = spr_card_onhover;
+    }
+
+    if (mouse_check_button_pressed(mb_left) && !instance_exists(obj_modal)) {
+        obj_textbox_content.result_text = ""; // Clear the result text ready for the next event that has output
+
+        // Update global.selectedCard with this card's data
+        global.selectedCard = cardData;
+
+        if (global.debug.card_chosen == true) {
+            show_debug_message("===");
+            show_debug_message("Selected Card Name: " + cardData.name);
+            show_debug_message("Selected Card Type: " + cardData.type);
+            show_debug_message("Selected Card Desc: " + cardData.desc);
+            show_debug_message("===");
+        }
+
+        // Execute action based on current gameState and intro state
+        ExecuteGameState();
+    }
+} else {
+    // Change back to normal sprite
+    sprite_index = spr_card;
+}
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+obj_clock (visible): |DONE|
+
+Create event:
+// Total cycle duration for a full cycle (day + night = 240 seconds)
+cycle_duration = 240;
+
+// Duration for either day or night
+dayNightDuration = cycle_duration / 2;  // 2 minutes for day and 2 minutes for night
+
+// Initialize the clock specific accumulator
+global.time_accumulators.clock = 0;
+
+// Current time in the cycle
+global.time = 0;
+
+// Determine if it's day or night (1 for day, 0 for night)
+global.is_day = 1;
+
+
+Step event:
+// Increment cycle time using the global time accumulator and only increment once character has been created
+if (global.characterCreated == true) {
+    global.time += global.time_accumulators.clock;  // Add elapsed real-time seconds to cycle time
+    global.time_accumulators.clock = 0;  // Reset the accumulator after updating time
+}
+
+// Check if we need to switch from day to night or vice versa
+if (global.time >= dayNightDuration) {
+    global.is_day = !global.is_day; // Toggle between day (1) and night (0)
+    global.time -= dayNightDuration;  // Reset the timer for the next half (day or night)
+}
+
+
+Draw event:
+// Clock properties
+var radius = 50; 
+
+// Set color for the semi-circle background
+draw_set_colour(global.is_day ? make_colour_rgb(144, 185, 224) : c_black);
+
+// only display the semi-circle/clock once the character has been created
+if (global.characterCreated == true) {
+	// Begin drawing the filled semi-circle
+	draw_primitive_begin(pr_trianglefan);
+	draw_vertex(x, y); // Center point
+}
+
+// Loop to create the semi-circle (bottom half)
+// Adjusting angle from 0 to 180 for the bottom half
+for (var angle = 0; angle <= 180; angle += 1) {
+    var radAngle = degtorad(angle);
+    var posX = x + cos(radAngle) * radius;
+    var posY = y + sin(radAngle) * radius;
+    draw_vertex(posX, posY);
+}
+
+// Complete the semi-circle by connecting back to the starting point
+draw_vertex(x + radius, y); // Ensure this connects to the starting side
+draw_primitive_end();
+
+// Calculate angle for the sun/moon position
+// Calculate the fraction of the current day or night that has passed
+var cycle_fraction = global.time / dayNightDuration;
+
+// Indicator should move across the bottom half of the circle over the duration
+var indicatorAngle = lerp(0, 180, cycle_fraction);  // Starts at 90 degrees (left side), moves to 270 degrees (right side)
+var radIndicatorAngle = degtorad(indicatorAngle);
+
+// Draw the sun/moon indicator
+draw_set_colour(global.is_day ? c_yellow : c_gray); // Yellow for day, gray for night
+var indicatorX = x + cos(radIndicatorAngle) * (radius - 10); // Adjust position for indicator
+var indicatorY = y + sin(radIndicatorAngle) * (radius - 10);
+draw_circle(indicatorX, indicatorY, 7, false); // Adjust size as needed
+
+// Optionally, add more visuals like changing the background color, etc.
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+obj_modal (visible): |DONE|
+
+Create event:
+// Set modal properties
+modalWidth = 400;
+modalHeight = 300;
+modalText = "This is a modal pop-up!";
+// Center the modal on the screen
+x = (room_width - modalWidth) / 2;
+y = (room_height - modalHeight) / 2;
+depth = -10000; // A low depth value to ensure it's on top
+
+
+Draw event:
+// Draw a semi-transparent background to "dim" the rest of the game
+draw_set_alpha(0.5);
+draw_rectangle_color(0, 0, room_width, room_height, c_black, c_black, c_black, c_black, false);
+draw_set_alpha(1); // Reset alpha to fully opaque for subsequent drawings
+
+// Set the border color and draw the border
+var borderColor = make_color_rgb(255, 242, 0); // RGB color for the border
+draw_set_color(borderColor);
+// Draw the border rectangle slightly larger to create a 3px border effect
+draw_rectangle(x - 3, y - 3, x + modalWidth + 3, y + modalHeight + 3, false); 
+
+// Draw the modal background inside the border
+var backgroundColor = make_color_rgb(68, 68, 68); // Modal background color
+draw_set_color(backgroundColor);
+// Draw the modal background rectangle, ensuring it's filled and opaque
+draw_rectangle(x, y, x + modalWidth, y + modalHeight, false); // This should be false to fill the rectangle
+
+// Reset color to white and alpha to fully opaque for subsequent drawings
+draw_set_color(c_white);
+draw_set_alpha(1);
+
+// Draw the modal text
+draw_text(x + 10, y + 10, modalText);
+
+
+// Optionally, draw a close button or handle input to close the modal within the Step Event
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_level.gml: |DONE|
+
+// XP requirement for next level
+function XPRequiredForNextLevel(currentLevel) {
+	return round(power((currentLevel / 0.07), 2));
+}
+
+function LevelUp() {
+	// check if the player is eligible to level up
+	if(global.player.currentXP >= global.player.requiredXP) {
+		global.player.currentXP = 0; // reset players current XP to zero
+		global.player.level += 1; // increase player level by 1
+		global.player.requiredXP = XPRequiredForNextLevel(global.player.level); // set the XP requirement for the next level up
+
+
+	    // Modal does not exist, so create it
+	    var modalInstance = instance_create_layer(room_width / 2, room_height / 2, "Instances", obj_modal);
+		modalInstance.modalText = "Level up! [Lvl " + string(global.player.level) + "] spacebar to close";
+	}
+	
+	return;
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_player.gml:
+
+function ApplyHealthRegen() {
+	if(global.player.currentHealth > 0 && (global.player.currentHealth < global.player.maxHealth)) 
+	{
+		if(global.player.currentHealth < global.player.maxHealth)
+		{
+			global.player.currentHealth	+= HealthRegen(global.player.strength);
+		} else {
+			global.player.currentHealth = global.player.maxHealth;	
+		}
+	}
+	
+	return;
+}
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_arrays.gml: |DONE|
+
+// @description
+function array_exists(array, value) {
+    for (var i = 0; i < array_length(array); i++) {
+        if (array[i] == value) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// @description
+function array_push(array, value) {
+    var length = array_length(array);
+    array[length] = value;
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_determine_event.gml: |DONE|
+
+/// @description determine what event is next and the weightings
+
+/// @description SelectWeightedEvent()
+/// @return Selected event name based on adjusted weights for rarity
+function SelectWeightedEvent() {
+    var totalWeight = 0;
+    var cumulativeWeights = [];
+    
+    // Calculate total weight and prepare cumulative weights
+    for (var i = 0; i < array_length(global.random_chance); i++) {
+        var event = global.random_chance[i];
+        var effectiveChance = 1.0 / event.chance;  // Inverse probability to make rare events less likely
+        totalWeight += effectiveChance;
+        cumulativeWeights[i] = totalWeight;
+    }
+    
+    // Randomly select based on weight
+    var randomValue = random(totalWeight);
+    for (var i = 0; i < array_length(cumulativeWeights); i++) {
+        if (randomValue <= cumulativeWeights[i]) {
+            return global.random_chance[i].name;
+        }
+    }
+    
+    return "explore";  // Default event if something goes wrong
+}
+
+// Updated DetermineNextEvent function
+function DetermineNextEvent() {
+    if (global.gameState == GameState.EXPLORING) {
+        var selectedEvent = SelectWeightedEvent();
+
+        switch (selectedEvent) {
+            case "mob_encounter":
+                MobEncounter();
+                global.gameState = GameState.MOB_ENCOUNTER;
+                break;
+
+            case "found_herb":
+                FoundHerb();
+                global.gameState = GameState.FOUND_HERB;
+                break;
+
+            case "explore":
+                Explore();
+                break;
+
+            case "rare_event":
+                // Call rare event function
+                break;
+
+            case "epic_event":
+                // Call epic event function
+                break;
+
+            case "legendary_event":
+                // Call legendary event function
+                break;
+
+            case "ultra_legendary_event":
+                // Call ultra legendary event function
+                break;
+
+            case "cosmic_event":
+                // Call cosmic event function
+                break;
+
+            default:
+                Explore(); // Fallback if no valid event is selected
+                break;
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_end.gml: |DONE|
+
+// @description free up the used memory
+function CleanUp() {
+    // Clear array contents by resetting them
+	global.classCards = [];
+	global.peopleCards = [];
+	global.mobCards = [];
+	global.battleActions = [];
+	global.herbCards = [];
+	global.guessCards = [];
+	global.exploreCards = [];
+    // Additional cleanup if any other global resources or singletons need to be reset
+	return;
+}
+
+// @description free memory and close the game
+function QuitGame() {
+		CleanUp();
+		game_end();
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_init.gml: |DONE|
+
+function initialise() {
+	
+	// is this the release build?
+	gml_release_mode(false);
+	
+	// debug mode
+	global.debug_mode_enabled = true;
+	
+	// cap the FPS
+	game_set_speed(144, gamespeed_fps);
+	
+	// define globals (this also includes all card definitions)
+	Globals();
+	
+	// randomize the seed
+	randomize();
+	
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_globals.gml: |DONE|
+
+	global.time_accumulators = {
+		one_second: 0,
+		clock: 0
+	}
+	
+	global.time_accumulator = 0;
+	global.time = 0;
+	global.is_day = 1;
+
+	global.isPaused = false;
+	global.showModal = false;
+	global.showAlt = false;
+	
+----------------------------------------------------------------------------------------------------------------------
+
+script_draw.gml: |DONE|
+
+function DrawCircle(x, y, radius, show_percentage, percentage) {
+    var steps = 360; // Define the number of steps for smoother arcs
+    
+    // Draw the full background pie in black
+    draw_set_colour(c_black);
+    for (var i = 0; i <= 360; i += (360/steps)) {
+        var angle1 = degtorad(i);
+        var angle2 = degtorad(i + (360/steps));
+        draw_primitive_begin(pr_trianglefan);
+        draw_vertex(x, y); // Center
+        draw_vertex(x + cos(angle1) * radius, y + sin(angle1) * radius);
+        draw_vertex(x + cos(angle2) * radius, y + sin(angle2) * radius);
+        draw_primitive_end();
+    }
+
+    // Draw the XP progress slice in purple
+    draw_set_colour(c_purple);
+    var endAngle = percentage * 360; // Calculate end angle based on XP
+    for (var i = 0; i <= endAngle; i += (360/steps)) {
+        var angle1 = degtorad(i);
+        var angle2 = degtorad(i + (360/steps));
+        draw_primitive_begin(pr_trianglefan);
+        draw_vertex(x, y); // Center
+        draw_vertex(x + cos(angle1) * radius, y + sin(angle1) * radius);
+        if (i < endAngle) { // Avoid drawing beyond the XP slice
+            draw_vertex(x + cos(angle2) * radius, y + sin(angle2) * radius);
+        }
+        draw_primitive_end();
+    }
+
+   // Calculate the text position and percentage to display
+    var textPercentage = string(round(percentage * 100)) + "%"; // Convert to string and add '%' sign
+    var textRadius = radius / 2; // Position the text in the middle of the radius for visibility
+    var angleForText = (percentage / 2) * 2 * pi; // Halfway through the filled arc
+
+    // Set color and font for the percentage text if needed
+    draw_set_colour(c_white);
+
+    // Calculate text position
+    var textX = x + cos(angleForText) * textRadius - string_width(textPercentage) / 2;
+    var textY = y + sin(angleForText) * textRadius - string_height(textPercentage) / 2;
+
+    // Draw the percentage text
+	if(show_percentage == true)
+	{
+		draw_text(textX, textY, textPercentage);
+	}
+}
+
+
+/// hex_to_color(hexString)
+/// @param hexString A string representing the color in hexadecimal format, can be "#RRGGBB" or "RRGGBB".
+/// @description var myColor = hex_to_color("#FF5733"); Converts the hex code to a GameMaker color
+/// draw_set_colour(myColor); Sets the drawing color
+/// draw_circle(100, 100, 50, true); Draws a circle with the color derived from the hex code
+function hex_to_color(hexString) {
+    // Remove '#' from the hex string if present
+    var cleanedHex = string_replace_all(hexString, "#", "");
+    
+    // Convert the cleaned hex string to a real number (base 16)
+    var num = strtoreal(cleanedHex, 16);
+    
+    // Extract RGB components
+    var red = (num >> 16) & 0xFF;
+    var green = (num >> 8) & 0xFF;
+    var blue = num & 0xFF;
+    
+    // Return the GameMaker color
+    return make_colour_rgb(red, green, blue);
+}
+/*
+// Example usage
+var myColor = hex_to_color("#FF5733"); // Converts the hex code to a GameMaker color
+draw_set_colour(myColor); // Sets the drawing color
+draw_circle(100, 100, 50, true); // Draws a circle with the color derived from the hex code
+*/
+
+----------------------------------------------------------------------------------------------------------------------
+
+script_text.gml:
+
+/// @description DrawTextWithHighlight(x, y, fullText, highlightWord, colorNormal, colorHighlight)
+/// @param x X-coordinate for the text
+/// @param y Y-coordinate for the text
+/// @param fullText The full text to be drawn
+/// @param highlightWord The word in the text to highlight
+/// @param colorNormal The color for the normal text
+/// @param colorHighlight The color for the highlighted word
+
+function DrawTextWithHighlight(x, y, fullText, highlightWord, colorNormal, colorHighlight) {
+    var parts = string_split(fullText, highlightWord, true);
+    var currentX = x;
+
+    for (var i = 0; i < array_length(parts); i++) {
+        // Draw the text part
+        draw_set_colour(colorNormal);
+        draw_text(currentX, y, parts[i]);
+        currentX += string_width(parts[i]);
+
+        // If this part is followed by the highlight word, draw it in highlight color
+        if (i < array_length(parts) - 1) {
+            draw_set_colour(colorHighlight);
+            draw_text(currentX, y, highlightWord);
+            currentX += string_width(highlightWord);
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------

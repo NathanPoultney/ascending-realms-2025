@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"End",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"End",
+  "parent":{
+    "name":"StateManagement",
+    "path":"folders/Scripts/StateManagement.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"DetermineEvent",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DetermineEvent",
+  "parent":{
+    "name":"Gameplay",
+    "path":"folders/Scripts/Gameplay.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

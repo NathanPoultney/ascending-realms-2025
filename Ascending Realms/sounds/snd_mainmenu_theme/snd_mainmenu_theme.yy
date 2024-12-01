@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_mainmenu_theme",
+  "audioGroupId":{
+    "name":"ag_music",
+    "path":"audiogroups/ag_music",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":8.780499,
+  "name":"snd_mainmenu_theme",
+  "parent":{
+    "name":"MainMenu",
+    "path":"folders/Sounds/Menus/MainMenu.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_mainmenu_theme.wav",
+  "type":0,
+  "volume":1.0,
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Save",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Save",
+  "parent":{
+    "name":"SaveLoad",
+    "path":"folders/Scripts/SaveLoad.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

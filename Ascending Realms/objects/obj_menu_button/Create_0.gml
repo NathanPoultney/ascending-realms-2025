@@ -1,0 +1,1 @@
+margin = 2; // Small margin from the edges

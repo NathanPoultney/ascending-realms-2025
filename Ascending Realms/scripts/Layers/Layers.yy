@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Layers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Layers",
+  "parent":{
+    "name":"Helpers",
+    "path":"folders/Scripts/Helpers.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

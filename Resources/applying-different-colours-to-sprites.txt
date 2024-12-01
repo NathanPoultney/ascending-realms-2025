@@ -1,0 +1,44 @@
+ou can programmatically fill in shapes of the sprites with a color dynamically by using shader effects or surface manipulation. Here's a basic approach using surface manipulation, which is straightforward and doesn't require the complexity of shaders.
+
+Step 1: Create a Mask for the Team Color
+You need a separate image (a "mask") for each sprite where the areas you want to color dynamically are filled with a specific color (like white), and everything else is transparent. This mask will be used to determine which parts of the sprite should be colored.
+
+Step 2: Create the Dynamic Coloring Function
+You can create a function that draws the original sprite and then draws the mask on top, using a blend mode to color the mask.
+
+Here’s an example of how you might code this:
+
+gml
+Copy code
+// Assume you have these assets:
+// - spr_unit_base: The base sprite without any team color
+// - spr_unit_mask: The mask sprite that has white where the team color should be
+
+// Function to draw the unit with a dynamic team color
+function DrawUnitWithTeamColor(x, y, base_sprite, mask_sprite, team_color) {
+    // Draw the base sprite first
+    draw_sprite(base_sprite, 0, x, y);
+
+    // Set the blend mode to multiply so the white parts of the mask get colored
+    draw_set_blend_mode(bm_multiply);
+
+    // Set the drawing color to the team's color
+    draw_set_color(team_color);
+
+    // Draw the mask sprite on top
+    draw_sprite(mask_sprite, 0, x, y);
+
+    // Reset the blend mode and color
+    draw_set_blend_mode(bm_normal);
+    draw_set_color(c_white);
+}
+
+// Example usage in a Draw event
+DrawUnitWithTeamColor(x, y, spr_unit_base, spr_unit_mask, make_color_rgb(255, 0, 0)); // Red team color
+Step 3: Use the Function in Your Game
+You can call this function whenever you need to draw a unit or building with a specific team color. This approach allows you to dynamically change the team color without needing multiple versions of the sprite.
+
+Considerations:
+Performance: This method is generally efficient, but if you have many units, using surfaces or shaders might be more optimized for performance.
+Precision: The method depends on how well the mask is designed. If the mask is too detailed, it might require more precise positioning.
+This approach gives you flexibility and reduces the workload of creating multiple sprite variations for each team color.

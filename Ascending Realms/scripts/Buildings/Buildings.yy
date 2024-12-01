@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Buildings",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Buildings",
+  "parent":{
+    "name":"Gameplay",
+    "path":"folders/Scripts/Gameplay.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

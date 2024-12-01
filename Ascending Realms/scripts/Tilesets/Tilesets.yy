@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Tilesets",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Tilesets",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Map.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
