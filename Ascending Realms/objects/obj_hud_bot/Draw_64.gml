@@ -49,6 +49,7 @@ var col6_x = col5_x + column2_5_width + padding;
 
 // MINIMAP //
 
+/*
 // Adjusted minimap size and position
 global.minimap.minimap_x = col1_x;
 global.minimap.minimap_y = text_y;
@@ -129,6 +130,8 @@ draw_rectangle(minimap_cam_x, minimap_cam_y,
 
 // END MINIMAP //
 
+*/
+
 // Draw the grey border square in the second column (moved from col3 to col2)
 var square_size = global.hud_bot.object_display_square_size;
 var border_col = make_colour_rgb(211, 168, 98); // gold colour for the border
@@ -142,6 +145,7 @@ draw_rectangle(col2_x, text_y, col2_x + square_size, text_y + square_size, false
 draw_set_color(border_col);
 draw_rectangle(col2_x, text_y, col2_x + square_size, text_y + square_size, true);
 
+/*
 // Check if a unit or building is selected
 if (instance_exists(global.selected_object)) {
     var square_center_x = col2_x + square_size / 2;
@@ -267,3 +271,4 @@ if (instance_exists(global.selected_object)) {
             "Assigned Workers: " + string(assigned_worker_count));
     }
 }
+*/

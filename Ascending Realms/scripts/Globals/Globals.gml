@@ -48,7 +48,8 @@ function Globals() {
 
 	global.map_id = {
 		valleyofblood: asset_get_index("map_valleyofblood"),
-		valleyofblood_loadingscreen: asset_get_index("map_valleyofblood_intro")
+		valleyofblood_loadingscreen: asset_get_index("map_valleyofblood_intro"),
+		demo_level: asset_get_index("map_demolevel")
 	};
 
 

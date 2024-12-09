@@ -1,7 +1,9 @@
 // TIMEKEEPING 
 /* only move time forward if the game is not paused, and we are in the correct room */
 
-if(room == global.map_id.valleyofblood) {
+if(room == global.map_id.demo_level) {
+	
+	global.game_started = true;
 
 	/* Proceed with time accumulation and game logic if not paused and game has started */
 	if(global.isPaused == false && global.game_started == true)
@@ -31,7 +33,7 @@ if(room == global.map_id.valleyofblood) {
 	        show_debug_message("-> Game saved automatically.");
 	
 		    // Call function to update resources
-			UpdateWorkerResources();
+			//UpdateWorkerResources();
 		
 			//ApplyHealthRegen();
 			//ApplyManaRegen();
@@ -44,8 +46,8 @@ if(room == global.map_id.valleyofblood) {
 	    // Check if 10 seconds have passed
 	    if(global.time_accumulators.save_timer >= 10.0) {
 	        // Perform save action
-	        SaveGame("savefile_backup.json");
-	        show_debug_message("-> Secondary game saved automatically after 10 seconds.");
+	        //SaveGame("savefile_backup.json");
+	        //show_debug_message("-> Secondary game saved automatically after 10 seconds.");
         
 	        // Reset the save_timer accumulator
 	        global.time_accumulators.save_timer -= 10.0;
@@ -64,17 +66,18 @@ if(keyboard_check_pressed(vk_f12))
 	QuitGame();		
 }
 
-// if the ESC key has been pressed, return to the main menu
+// if the ESC key has been pressed, return to the main menu or back to the level
 if(keyboard_check_pressed(vk_escape))
 {
-	if(room == global.map_id.valleyofblood)
+	if(room == global.map_id.demo_level)
 	{
 		room_goto(global.room_id.main_menu);
 	} else if(room == global.room_id.main_menu) {
-		room_goto(global.map_id.valleyofblood);	
+		room_goto(global.map_id.demo_level);	
 	}
 }
 
+/*
 // Center the camera on obj_castle with building_team = TEAMS.PLAYER (1) when the Home key is pressed
 if (keyboard_check_pressed(global.hotkey.center_camera_on_castle)) {
     // Find all instances of obj_castle
@@ -102,8 +105,11 @@ if (keyboard_check_pressed(global.hotkey.center_camera_on_castle)) {
 	}
 
 }
+*/
 
-// toggle modal
+if(room == global.map_id.demo_level)
+{	
+	// toggle modal
 	if (keyboard_check_pressed(vk_space) || keyboard_check_pressed(ord("P")) || keyboard_check_pressed(vk_pause)) {
 	    if (instance_exists(obj_modal)) {
 	        // Modal exists, so destroy it
@@ -138,20 +144,25 @@ if (keyboard_check_pressed(global.hotkey.center_camera_on_castle)) {
 		}
 	}
 
-// toggle alt text
-if(keyboard_check_direct(vk_alt)) {
-	global.showAlt = true;	
-} else {
-	global.showAlt = false;	
+	// toggle alt text
+	if(keyboard_check_direct(vk_alt)) {
+		global.showAlt = true;	
+	} else {
+		global.showAlt = false;	
+	}
+
 }
 
+/*
 // recruit units
 if( keyboard_check_pressed(ord(global.hotkey.recruit_worker))) {
 	RecruitWorker();	
 }
+*/
 
 /// HOT KEYS -- END ///
 
+/*
 // Gameplay specific
 if (room == global.map_id.valleyofblood && !global.isPaused) {
     
@@ -325,3 +336,4 @@ if (room == global.map_id.valleyofblood && !global.isPaused) {
 		}
 
 }
+*/

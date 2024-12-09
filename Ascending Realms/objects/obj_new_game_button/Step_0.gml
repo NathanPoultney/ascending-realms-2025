@@ -7,8 +7,10 @@ if(CheckClick() == true)
 	if(global.game_started == true)
 	{
 		StopMainMenuTheme();
-		room_goto(global.map_id.valleyofblood);	
+		//room_goto(global.map_id.valleyofblood);	
+		room_goto(global.map_id.demo_level);
 	} else { // otherwise, show the loading screen first
-		room_goto(global.map_id.valleyofblood_loadingscreen);
+		//room_goto(global.map_id.valleyofblood_loadingscreen);
+		room_goto(global.map_id.demo_level);
 	}
 }

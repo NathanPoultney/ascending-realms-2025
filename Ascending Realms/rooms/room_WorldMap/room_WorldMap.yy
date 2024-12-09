@@ -21,8 +21,8 @@
   ],
   "name":"room_WorldMap",
   "parent":{
-    "name":"Rooms",
-    "path":"folders/Rooms.yy",
+    "name":"archived",
+    "path":"folders/Rooms/archived.yy",
   },
   "parentRoom":null,
   "physicsSettings":{
