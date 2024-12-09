@@ -16,6 +16,7 @@
     {"name":"inst_43C3BCDA","path":"rooms/room_MainMenu/room_MainMenu.yy",},
     {"name":"inst_5A5D74E2","path":"rooms/room_MainMenu/room_MainMenu.yy",},
     {"name":"inst_4D93496C","path":"rooms/room_MainMenu/room_MainMenu.yy",},
+    {"name":"inst_43531CD9","path":"rooms/room_MainMenu/room_MainMenu.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -30,6 +31,7 @@
         {"$GMRInstance":"v1","%Name":"inst_43C3BCDA","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_43C3BCDA","objectId":{"name":"obj_underline","path":"objects/obj_underline/obj_underline.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":512.0,"y":461.0,},
         {"$GMRInstance":"v1","%Name":"inst_5A5D74E2","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_5A5D74E2","objectId":{"name":"obj_discord","path":"objects/obj_discord/obj_discord.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":0.04743236,"scaleY":0.047432363,"x":170.0,"y":725.0,},
         {"$GMRInstance":"v1","%Name":"inst_4D93496C","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_4D93496C","objectId":{"name":"obj_menu_button","path":"objects/obj_menu_button/obj_menu_button.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":0.65,"scaleY":0.65,"x":1053.0,"y":16.57673,},
+        {"$GMRInstance":"v1","%Name":"inst_43531CD9","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_43531CD9","objectId":{"name":"obj_game_controller","path":"objects/obj_game_controller/obj_game_controller.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":-97.0,"y":8.576731,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRAssetLayer":"","%Name":"Assets_1","assets":[
         {"$GMRSpriteGraphic":"","%Name":"graphic_4AB5F9A8","animationSpeed":1.0,"colour":4294967295,"frozen":false,"headPosition":0.0,"ignore":false,"inheritedItemId":null,"inheritItemSettings":false,"name":"graphic_4AB5F9A8","resourceType":"GMRSpriteGraphic","resourceVersion":"2.0","rotation":0.0,"scaleX":4.484375,"scaleY":3.921875,"spriteId":{"name":"Spr_MenuButtonsBackground","path":"sprites/Spr_MenuButtonsBackground/Spr_MenuButtonsBackground.yy",},"x":512.52124,"y":375.5,},

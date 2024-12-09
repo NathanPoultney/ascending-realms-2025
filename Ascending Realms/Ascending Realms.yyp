@@ -125,6 +125,7 @@
     {"id":{"name":"obj_underline","path":"objects/obj_underline/obj_underline.yy",},},
     {"id":{"name":"obj_unit","path":"objects/obj_unit/obj_unit.yy",},},
     {"id":{"name":"obj_worker","path":"objects/obj_worker/obj_worker.yy",},},
+    {"id":{"name":"map_demolevel","path":"rooms/map_demolevel/map_demolevel.yy",},},
     {"id":{"name":"map_valleyofblood_intro","path":"rooms/map_valleyofblood_intro/map_valleyofblood_intro.yy",},},
     {"id":{"name":"map_valleyofblood","path":"rooms/map_valleyofblood/map_valleyofblood.yy",},},
     {"id":{"name":"room_Credits","path":"rooms/room_Credits/room_Credits.yy",},},
@@ -225,6 +226,7 @@
     {"roomId":{"name":"room_WorldMap","path":"rooms/room_WorldMap/room_WorldMap.yy",},},
     {"roomId":{"name":"map_valleyofblood","path":"rooms/map_valleyofblood/map_valleyofblood.yy",},},
     {"roomId":{"name":"map_valleyofblood_intro","path":"rooms/map_valleyofblood_intro/map_valleyofblood_intro.yy",},},
+    {"roomId":{"name":"map_demolevel","path":"rooms/map_demolevel/map_demolevel.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

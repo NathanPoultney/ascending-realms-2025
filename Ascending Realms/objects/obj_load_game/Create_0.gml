@@ -1,4 +1,7 @@
 /// @description Insert description here
+
+
+// OLD LOADING
 // You can write your code in this editor
 if(global.game_started == true && room == global.map_id.valleyofblood && global.game_loaded == false && global.save_game_available == true)
 {
@@ -14,3 +17,4 @@ if(global.game_started == true && room == global.map_id.valleyofblood && global.
 	*/
 	global.game_loaded = true;
 }
+// TO BE REPLACED

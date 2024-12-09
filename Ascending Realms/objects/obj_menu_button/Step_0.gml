@@ -24,12 +24,12 @@ if (global.game_started == true) {
             // Play mouse click sound
             audio_play_sound(snd_click4, 1, false);
 
-            if (room == global.map_id.valleyofblood) {
+            if (room == global.map_id.demo_level) {
                 // Go to the main menu room from valley of blood map
                 room_goto(global.room_id.main_menu);
             } else if (room == global.room_id.main_menu || room == global.room_id.settings) {
                 // Go to valley of blood map if in main menu or settings
-                room_goto(global.map_id.valleyofblood);  
+                room_goto(global.map_id.demo_level);  
             }
         }
     } else {

@@ -147,8 +147,8 @@
   ],
   "name":"map_valleyofblood",
   "parent":{
-    "name":"Maps",
-    "path":"folders/Rooms/Maps.yy",
+    "name":"archived",
+    "path":"folders/Rooms/archived.yy",
   },
   "parentRoom":null,
   "physicsSettings":{
