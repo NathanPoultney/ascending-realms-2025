@@ -28,9 +28,6 @@ if(room == global.map_id.demo_level) {
 	        global.elapsed_time += 1;
 		
 			show_debug_message("-> One second has passed using delta time");
-
-	        SaveGame("savefile.json");
-	        show_debug_message("-> Game saved automatically.");
 	
 		    // Call function to update resources
 			//UpdateWorkerResources();
