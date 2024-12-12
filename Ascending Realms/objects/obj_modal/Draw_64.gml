@@ -4,7 +4,7 @@ var modal_y = window_get_height() / 2 - (modalHeight / 2);
 
 // Draw a semi-transparent background to "dim" the rest of the game
 draw_set_alpha(0.5);
-draw_rectangle_color(0, 0, room_width, room_height, c_black, c_black, c_black, c_black, false);
+draw_rectangle_color(0, 0, display_get_width(), display_get_height(), c_black, c_black, c_black, c_black, false);
 draw_set_alpha(1); // Reset alpha to fully opaque
 
 // Set the border color and draw the border

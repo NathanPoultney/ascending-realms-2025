@@ -81,6 +81,6 @@ if (global.features.enable_resolutions) {
         }
     } else {
         draw_set_color(c_black);  // Text inside the box is black
-        draw_text(box_x + 5, box_y_position + 5, "Select Resolution");
+        draw_text(box_x + 5, box_y_position + 5, "Change Resolution");
     }
 }
