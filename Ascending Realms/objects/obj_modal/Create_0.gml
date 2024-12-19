@@ -11,4 +11,4 @@ if (!variable_instance_exists(self, "modalText")) {
     modalText = "This is a modal pop-up!"; // Default text
 }
 
-depth = global.depth.defaultModal; // A low depth value to ensure it's on top
+//depth = global.depth.defaultModal; // A low depth value to ensure it's on top

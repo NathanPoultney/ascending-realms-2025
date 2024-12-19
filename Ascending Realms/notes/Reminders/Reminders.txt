@@ -1,0 +1,23 @@
+### https://www.reddit.com/r/gamemaker/comments/1b2evff/vm_vs_yyc/?rdt=40759
+
+to make it short:
+
+VM stand for virtual machine, it's faster to compile to and doesn't need extra thing to install and is pretty loose with coding standard.
+
+YYC stands for yoyo compiler, it converts code into C++ before compiling it. which means it needs you to install Microsoft visual studio community 2022 (or x-code on mac) to be able to compile. It's a bit slower to compile and a bit more rigorous with coding standard, but in exchange it run faster.
+
+---
+
+VM stands for "Virtual Machine". YYC on the other hand for "YoYo Compiler" as YoYoGames is who developes GameMaker.
+
+VM doesn't compile/export games for any specific computer architecture, but for a imaginary machine. Making "machine code" for virtual machine is easier than an actual machine. But the problem is that the virtual machine is not virtual, so you have "emulate it". So you have a separate runner, in a way emulator for a virtual machine, which executes this virtual machine's "machine code". The advantage is more portability, easier compilation, but the problem is that it is slower because of indirect computing.
+
+YYC instead compiles into native machine code. But it does it indirectly, first GML you have written will be transpiled into "equilevant" C++ code, which then is compiled with C++ compiler to target machine architecture. So this produces native machine code. Of course, because it needs to transpile GML into C++ code, it might not produce most efficient code, and you will get better results by writing C++ directly. But compared to VM, this produces faster execution, but it is slower to compile.
+
+---
+
+Also YYC is harder to take a peek on the code, if it matters for OP
+
+
+
+## TL;DR: For production compile to YYC.
