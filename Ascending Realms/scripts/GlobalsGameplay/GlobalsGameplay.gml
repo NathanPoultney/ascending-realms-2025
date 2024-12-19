@@ -100,5 +100,5 @@ function GlobalsGameplayConfig() {
 	global.gold_production_rate = 0;
 	global.wood_production_rate = 0;
 	global.food_production_rate = 0;
-		
+    
 }

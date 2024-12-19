@@ -22,4 +22,4 @@ is_dragging = false; // Flag to track dragging state
 global.dropdown_open = false; // Initially, the dropdown is not open
 global.selected_resolution = string(global.settings.ResolutionWidth) + "x" + string(global.settings.ResolutionHeight); // Set a default resolution or load from saved settings
 
-depth = global.depth.objSettingsInterface;
+//depth = global.depth.objSettingsInterface;
